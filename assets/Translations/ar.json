@@ -1,0 +1,25 @@
+{
+  "success": "تم بنجاح",
+  "error": "خطأ",
+  "info": "معلومات",
+  "warning": "تحذير",
+  "cancel": "إلغاء",
+  "retry": "إعادة المحاولة",
+  "skip": "تخطي",
+  "next": "التالي",
+  "back": "رجوع",
+  "continue_text": "استمرار",
+  "apply": "إضافة",
+  "submit": "إرسال",
+  "add_text": "إضافة",
+  "home": "الرئيسية",
+  "menu": "القائمة",
+  "cart": "السلة",
+  "rewards": "المكافآت",
+  "sar": "ريال",
+  "load_more": "تحميل المزيد",
+  "recommendation": "التوصيات",
+  "most_use_products": "المنتجات الأكثر استخدامًا",
+  "general_error_message": "Something went wrong, Please try again!"
+}
+
