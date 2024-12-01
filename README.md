@@ -38,7 +38,7 @@ This Flutter project is app that displays a grid of products on the main screen.
     ```
 2. Navigate to the project directory:
     ```bash
-    cd caregiver_norah_app
+    cd nana
     ```
 
 3. Install the dependencies:
