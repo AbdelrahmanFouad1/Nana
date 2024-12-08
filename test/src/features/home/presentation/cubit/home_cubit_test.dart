@@ -56,31 +56,6 @@ void main() {
       expect(homeCubit.state, const HomeState.initial());
     });
 
-    test('productsRecommendation getter should return _productsRecommendation', () async {
-      // Arrange
-      when(mockProductsUseCase.call(any))
-          .thenAnswer((_) async => Right(fakeProductResponse));
-
-      // Act
-      await homeCubit.products();
-      final result = homeCubit.productsRecommendation;
-
-      // Assert
-      expect(result, equals(fakeProductResponse));
-    });
-
-    test('productsMostUsed getter should return _productsMostUsed', () async {
-      // Arrange
-      when(mockProductsUseCase.call(any))
-          .thenAnswer((_) async => Right(fakeProductResponse));
-
-      // Act
-      await homeCubit.products(); // Ensure the list is populated
-      final result = homeCubit.productsMostUsed;
-
-      // Assert
-      expect(result, equals(fakeProductResponse));
-    });
 
     blocTest<HomeCubit, HomeState>(
       'emits [HomeState.productsLoading, HomeState.productsLoaded] on success for non-pagination',

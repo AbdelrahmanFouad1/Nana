@@ -13,18 +13,17 @@ class MostUseProductGridWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: BlocBuilder<HomeCubit, HomeState>(
+        buildWhen: (previous, current) => current.maybeWhen(
+          orElse: () => false,
+          productsLoaded: (_) => true,
+          productsLoadedMore: (_, __) => true,
+        ),
         builder: (context, state) {
-          final products = HomeCubit.get(context).productsMostUsed;
-
-          final isLoading = state.maybeMap(
-            productsLoading: (_) => true,
-            productsLoadingMore: (_) => true,
-            orElse: () => false,
+          final data = state.maybeWhen(
+            productsLoaded: (products) => products ?? [],
+            productsLoadedMore: (products, _) => products ?? [],
+            orElse: () => productMockList,
           );
-
-          onReachLimit() => !isLoading
-              ? HomeCubit.get(context).products(pagination: true)
-              : null;
 
           final grid = GridView.builder(
             padding: const EdgeInsets.all(0),
@@ -38,27 +37,23 @@ class MostUseProductGridWidget extends StatelessWidget {
             ),
             itemBuilder: (context, index) => Skeletonizer(
               enabled: state.maybeWhen(
-                productsLoading: () => true,
-                orElse: () => false,
+                productsLoaded: (_) => false,
+                productsLoadedMore: (_, __) => false,
+                orElse: () => true,
               ),
               child: ProductItemWidget(
-                model: state.maybeWhen(
-                  productsLoading: () => productMockList[index],
-                  orElse: () => products[index],
-                ),
+                model: data[index],
               ),
             ),
-            itemCount: state.maybeWhen(
-              productsLoading: () => productMockList.length,
-              orElse: () => products.length,
-            ),
+            itemCount: data.length,
           );
 
           return state.maybeMap(
             productsLoading: (_) => grid,
             orElse: () => ScrollNotificationListener(
-              onReachLimit: onReachLimit,
-              itemLength: products.length,
+              onReachLimit: () =>
+                  HomeCubit.get(context).products(pagination: true),
+              itemLength: data.length,
               canLoadMore: state.mapOrNull(
                 productsLoaded: (product) => true,
                 productsLoadedMore: (product) => product.canLoadMore,

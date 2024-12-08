@@ -27,11 +27,12 @@ class ScrollNotificationListener extends StatelessWidget {
   }
 
   bool _onNotification(ScrollNotification notification) {
-    if (isExceedLimit(notification.metrics) && limitPageSize) {
-      onReachLimit?.call();
+    if (notification is ScrollEndNotification) {
+      if (isExceedLimit(notification.metrics) && limitPageSize) {
+        onReachLimit?.call();
+      }
     }
-
-    return true;
+    return false;
   }
 
   bool isExceedLimit(ScrollMetrics metrics) =>

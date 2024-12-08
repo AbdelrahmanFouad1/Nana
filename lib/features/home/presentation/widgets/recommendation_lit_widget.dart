@@ -41,29 +41,32 @@ class RecommendationLitWidget extends StatelessWidget with ToastMixin {
                   ),
                 );
               },
+              buildWhen:(previous, current) => current.maybeWhen(
+                orElse: () => false,
+                productsLoaded: (_) => true,
+              ),
               builder: (context, state) {
+
+                final data = state.maybeWhen(
+                  productsLoaded: (products) =>  products ?? [],
+                  productsLoadedMore: (products, __) => products?.take(12).toList() ?? [],
+                  orElse: () => productMockList,
+                );
                 return ListView.separated(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => Skeletonizer(
                     enabled: state.maybeWhen(
-                      productsLoading: () => true,
-                      orElse: () => false,
+                      productsLoaded: (_) => false,
+                      productsLoadedMore: (_, __) => false,
+                      orElse: () => true,
                     ),
                     child: ProductItemWidget(
-                      model: state.maybeWhen(
-                        productsLoading: () => productMockList[index],
-                        orElse: () => HomeCubit.get(context)
-                            .productsRecommendation[index],
-                      ),
+                      model: data[index],
                     ),
                   ),
                   separatorBuilder: (context, index) => 10.horizontalSpace,
-                  itemCount: state.maybeWhen(
-                    productsLoading: () => productMockList.length,
-                    orElse: () =>
-                        HomeCubit.get(context).productsRecommendation.length,
-                  ),
+                  itemCount: data.length,
                 );
               },
             ),

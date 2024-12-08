@@ -13,13 +13,8 @@ class HomeCubit extends Cubit<HomeState> {
 
   static HomeCubit get(context) => BlocProvider.of(context);
 
-  List<ProductModel> _productsMostUsed = [];
+  List<ProductModel> _products = [];
 
-  List<ProductModel> get productsMostUsed => _productsMostUsed;
-
-  List<ProductModel> _productsRecommendation = [];
-
-  List<ProductModel> get productsRecommendation => _productsRecommendation;
 
   int _offset = 0;
 
@@ -59,10 +54,10 @@ class HomeCubit extends Cubit<HomeState> {
       return emit(HomeState.productsError(left));
     }, (right) {
       if (pagination) {
-        _productsMostUsed = [..._productsMostUsed, ...right];
-        return emit(HomeState.productsLoadedMore(right, right.isNotEmpty));
+        _products.addAll(right);
+        return emit(HomeState.productsLoadedMore(_products, right.isNotEmpty));
       } else {
-        _productsRecommendation = _productsMostUsed = right;
+        _products = right;
         return emit(HomeState.productsLoaded(right));
       }
     });
